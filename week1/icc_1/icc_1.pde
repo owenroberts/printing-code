@@ -20,10 +20,17 @@ void setup()
   size(round(print_width * make_bigger), round(print_height * make_bigger));
 
   beginRecord(PDF, "grab.pdf"); 
-  background(30);
-  smooth();
-  fill(255, 0, 0); 
-  ellipse(width / 2, height / 2, 400, 400); 
+  background(255);
+  
+  stroke(0);
+  
+  ellipse(width/4, height/8-height/32, height/16, height/16); 
+  
+  fill(0);
+  
+  rect(width/12, height/8-height/16, height/24, height/16);
+  
+  triangle(-width/4, height/8-height/20, width/12, height/8-height/17, width/12, width/12 + height/16);
   
   endRecord();
 }
