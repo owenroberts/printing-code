@@ -12,11 +12,7 @@ void setup() {
   background(360);
   noFill();
   noLoop();
-<<<<<<< HEAD
-  strokeWeight(5);
-=======
   strokeWeight(2);
->>>>>>> newbranch
   strokeJoin(ROUND);
   strokeCap(SQUARE);
 
@@ -33,18 +29,11 @@ void setup() {
 
 void draw() {
   RG.init(this);
-<<<<<<< HEAD
-  RFont font = new RFont("FreeSansNoPunch.ttf", 100, RFont.LEFT);
-
-  RGroup group = font.toGroup("type").toPolygonGroup();
-  RGroup group2 = font.toGroup("Once upon a time there was a cat.").toPolygonGroup();
-=======
   RFont font = new RFont("FreeSansNoPunch.ttf", 50, RFont.LEFT);
 
   RGroup group = font.toGroup("type").toPolygonGroup();
-  RGroup group2 = font.toGroup("there once was a cat there once was a cat there once was a cat there once was a cat").toPolygonGroup();
+  RGroup group2 = font.toGroup("there once was a cat").toPolygonGroup();
   println(group2.elements.length);
->>>>>>> newbranch
 
 
 
@@ -81,17 +70,10 @@ void draw() {
           counter2++;
         }
         RPoint wPoint = wContour.points[j - counter2];
-<<<<<<< HEAD
-        //vertex((tPoint.x + wPoint.x) / 2, (tPoint.y + wPoint.y) / 2);
-        ellipse((tPoint.x + wPoint.x) / 2, (tPoint.y + wPoint.y) / 2, 2, 2);
-        //ellipse(wPoint.x, wPoint.y, 2, 2);
-        ellipse(tPoint.x, tPoint.y, 1, 1);
-=======
         vertex((tPoint.x + wPoint.x) / 2, (tPoint.y + wPoint.y) / 2);
         //ellipse((tPoint.x + wPoint.x) / 2, (tPoint.y + wPoint.y) / 2, 2, 2);
         //ellipse(wPoint.x, wPoint.y, 2, 2);
        // ellipse(tPoint.x, tPoint.y, 1, 1);
->>>>>>> newbranch
       }
       endShape();
     }
