@@ -1,4 +1,6 @@
 import geomerative.*;
+import processing.pdf.*;
+
 
 
 RShape catshp;
@@ -7,13 +9,30 @@ RShape catpolyshp;
 RFont font;
 RGroup fontgroup;
 
-color color1;  
+color color1;
 color color2;
 color color3;
 color black;
 
+float[][] points;
+
+int counter = 0;
+
+float print_width = 17;
+float print_height = 22;
+float make_bigger = 40;
+
 void setup() {
-  frameRate(4);
+  String[] lines = loadStrings("points.txt");
+  points = new float[lines.length][2];
+  for (int i = 0; i < lines.length; i++) {
+    String[] line = splitTokens(lines[i]);
+    points[i][0] = float(line[0]);
+    points[i][1] = float(line[1]);
+  }
+
+
+  //size(round(print_width * make_bigger), round(print_height * make_bigger));
   size(1200, 800);
   colorMode(HSB, 360, 100, 100);
   background(360);
@@ -45,21 +64,19 @@ void setup() {
 void draw() {
   background(360);
   
-  print(mouseX + " ");
-  println(mouseY);
-  
-  
+  //beginRecord(PDF, "imgs/grab" + getClass().getName() + "_" + month()+ "_" + day() + "_" + hour() + "_" + minute() + "_" + second() + ".pdf"); 
 
   RCommand.setSegmentLength(map(height - 777, 0, height, 0, 100));
   font = new RFont("FreeSansNoPunch.ttf", 272, RFont.CENTER);
   fontgroup = font.toGroup("type").toPolygonGroup();
 
+  counter++;
+
   float pointSeparation = 25;
   RG.setPolygonizer(RG.UNIFORMLENGTH);
   RG.setPolygonizerLength(pointSeparation);
   catpolyshp = RG.polygonize(catshp);
-  //translate(catpolyshp.width/2, catpolyshp.height/2);
-  translate(width/2, height/2);
+  translate(width/2, catpolyshp.height);
 
   RPoint[] catpoints = catpolyshp.getPoints();
 
@@ -86,17 +103,11 @@ void draw() {
         fontpoint = fontcontour.points[h];
 
         stroke(black);
-        vertex( ((catpoint.x + fontpoint.x)/2)*0.2, ((catpoint.y + fontpoint.y)/2)*0.2 );
+        vertex( ((catpoint.x + fontpoint.x)/2)*1, ((catpoint.y + fontpoint.y)/2)*1);
       }
       endShape();
-      
-      
-//      print(" mouseX:" + mouseX);
-//      print(" mouseY:" + mouseY);
-//      print(" text:" + fontcontour.points.length);
-//      println(" cat:" + catpoints.length);
-
     }
   }
+  //endRecord();
 }
 
