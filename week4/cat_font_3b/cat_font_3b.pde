@@ -13,13 +13,14 @@ color color3;
 color black;
 
 void setup() {
+  frameRate(1);
   size(1200, 800);
   colorMode(HSB, 360, 100, 100);
   background(360);
-  strokeWeight(4);
+  strokeWeight(1);
   strokeJoin(ROUND);
   strokeCap(SQUARE);
-  
+
   noFill();
   //noLoop();
 
@@ -31,8 +32,8 @@ void setup() {
   black = color(0, 0, 0);
 
   RG.init(this);
-  RCommand.setSegmentLength(40);
   RCommand.setSegmentator(RCommand.UNIFORMLENGTH);
+  //RCommand.setSegmentLength(10);
   //font = new RFont("FreeSansNoPunch.ttf", 100, RFont.CENTER);
   //fontgroup = font.toGroup("a").toPolygonGroup();
 
@@ -44,24 +45,23 @@ void setup() {
 void draw() {
   background(360);
   
-  RCommand.setSegmentLength(map(height - mouseY, 0, height, 0, 50));
+  print(mouseX + " ");
+  println(mouseY);
+  
+  
+
+  RCommand.setSegmentLength(map(height - mouseY, 0, height, 0, 100));
   font = new RFont("FreeSansNoPunch.ttf", mouseX, RFont.CENTER);
   fontgroup = font.toGroup("type").toPolygonGroup();
 
-  float pointSeparation = 50;
+  float pointSeparation = 25;
   RG.setPolygonizer(RG.UNIFORMLENGTH);
   RG.setPolygonizerLength(pointSeparation);
   catpolyshp = RG.polygonize(catshp);
   //translate(catpolyshp.width/2, catpolyshp.height/2);
   translate(width/2, height/2);
-  //RG.shape(catpolyshp);
 
   RPoint[] catpoints = catpolyshp.getPoints();
-
-  for (int i = 0; i < catpoints.length; i++) {
-    stroke(color3);
-    //ellipse(catpoints[i].x, catpoints[i].y, 2, 2);
-  }
 
   for (int k = 0; k < fontgroup.elements.length; k++) {
     RPolygon fontpolygon = (RPolygon) fontgroup.elements[k];
@@ -71,56 +71,31 @@ void draw() {
 
       beginShape();
 
-      int counter = 0;
       int index = 0;
-      boolean cat = true;
-      if (catpoints.length > fontcontour.points.length) {
+      if (catpoints.length < fontcontour.points.length) {
         index = catpoints.length;
       } 
       else {
         index = fontcontour.points.length;
-        cat = false;
       }
-      
+
       RPoint catpoint;
       RPoint fontpoint;
       for (int h = 0; h < index; h++) {
-        if (cat) {
-          catpoint = catpoints[h];
-          if (counter == fontcontour.points.length - 1) {
-            counter = 0;
-          }
-          else {
-            counter++;
-          }
-          fontpoint = fontcontour.points[counter];
-        } 
-        else {
-          fontpoint = fontcontour.points[h];
-          if (counter == catpoints.length - 1) {
-            counter = 0;
-          }
-          else {
-            counter++;
-          }
-          catpoint = catpoints[counter];
-        }
+        catpoint = catpoints[h];
+        fontpoint = fontcontour.points[h];
 
         stroke(black);
-        vertex((catpoint.x + fontpoint.x)/2, (catpoint.y + fontpoint.y)/2 + catpolyshp.height/4);
-        //vertex((catpoint.x + fontpoint.x),(catpoint.y + fontpoint.y));
+        vertex( ((catpoint.x + fontpoint.x)/2)*0.2, ((catpoint.y + fontpoint.y)/2)*0.2 );
       }
       endShape();
+      
+      
+//      print(" mouseX:" + mouseX);
+//      print(" mouseY:" + mouseY);
+//      print(" text:" + fontcontour.points.length);
+//      println(" cat:" + catpoints.length);
 
-      beginShape();
-      print("text: " + fontcontour.points.length);
-      println("cat: " + catpoints.length);
-      for (int l = 0; l < fontcontour.points.length; l++) {
-        fontpoint = fontcontour.points[l];
-        stroke(color3);
-        //ellipse(fontpoint.x, fontpoint.y + catpolyshp.height/2, 2, 2);
-      }
-      endShape();
     }
   }
 }
