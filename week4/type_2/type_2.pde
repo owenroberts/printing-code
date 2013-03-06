@@ -3,6 +3,7 @@ import geomerative.*;
 size(1280, 800);
 colorMode(HSB, 360, 100, 100);
 background(360);
+//noFill();
 
 RG.init(this);
 RFont font = new RFont("FreeSansNoPunch.ttf", 200, RFont.LEFT);
