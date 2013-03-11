@@ -3,20 +3,18 @@ import geomerative.*;
 size(1280, 800);
 colorMode(HSB, 360, 100, 100);
 background(360);
-<<<<<<< HEAD
-=======
-//noFill();
->>>>>>> newbranch
+noFill();
+
 
 RG.init(this);
 RFont font = new RFont("FreeSansNoPunch.ttf", 200, RFont.LEFT);
-RFont leviFont = new RFont("levifont4.ttf", 200, RFont.LEFT);
+RFont leviFont = new RFont("CatFont1.ttf", 200, RFont.LEFT);
 
 RCommand.setSegmentLength(10);
 RCommand.setSegmentator(RCommand.UNIFORMLENGTH);
 
 RGroup group = font.toGroup("type").toPolygonGroup();
-RGroup group2 = leviFont.toGroup("TYPE").toPolygonGroup();
+RGroup group2 = leviFont.toGroup("BBBB").toPolygonGroup();
 
 boolean firstLetter = true;
 

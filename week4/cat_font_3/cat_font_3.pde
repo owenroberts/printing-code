@@ -46,7 +46,7 @@ void draw() {
   
   RCommand.setSegmentLength(map(height - mouseY, 0, height, 0, 50));
   font = new RFont("FreeSansNoPunch.ttf", mouseX, RFont.CENTER);
-  fontgroup = font.toGroup("type").toPolygonGroup();
+  fontgroup = font.toGroup("a").toPolygonGroup();
 
   float pointSeparation = 50;
   RG.setPolygonizer(RG.UNIFORMLENGTH);

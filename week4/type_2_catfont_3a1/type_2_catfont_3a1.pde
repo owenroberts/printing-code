@@ -22,7 +22,7 @@ void setup() {
   strokeJoin(ROUND);
   strokeCap(SQUARE);
 
-  //noFill();
+  noFill();
   //noLoop();
 
   color1 = color(300, 65, 90);
@@ -33,73 +33,35 @@ void setup() {
   black = color(0, 0, 0);
 
   RG.init(this);
-  freefont = new RFont("FreeSansNoPunch.ttf", 100, RFont.LEFT);
-  catfont = new RFont("CatFont1.ttf", 100, RFont.LEFT);
+  freefont = new RFont("FreeSansNoPunch.ttf", 50, RFont.LEFT);
+  catfont = new RFont("CatFont1.ttf", 50, RFont.LEFT);
 
   RCommand.setSegmentator(RCommand.UNIFORMLENGTH);
 }
 void draw() {
   background(360);
 
+  println(map(mouseY, 0, width, 0, 100) + " " + map(mouseX, 0, width, 0, 100));
+
   RCommand.setSegmentLength(map(mouseY, 0, width, 0, 100));
-  freegroup = freefont.toGroup("cat").toPolygonGroup();
+  freegroup = freefont.toGroup("Beware the cat").toPolygonGroup();
   RCommand.setSegmentLength(map(mouseX, 0, width, 0, 100));
-  catgroup = catfont.toGroup("BBB").toPolygonGroup();
+  catgroup = catfont.toGroup("BBBBBBBBBBBB").toPolygonGroup();
+  drawText(freegroup, catgroup);
+}
+
+
+void drawText(RGroup _font, RGroup _catfont) {
+  RGroup freegroup = _font;
+  RGroup catgruop = _catfont;
+  
 
   boolean firstLetter = true;
-
-  for (int k = 0; k < freegroup.elements.length; k++) {
-
-    polygon = (RPolygon) freegroup.elements[k];
-
-    if (firstLetter) {
-      //translate((polygon.getWidth() / 2), (height / 4) + (polygon.getHeight() / 2));
-      firstLetter = false;
-    }
-
-    for ( int i = 0; i < polygon.contours.length; i++) {
-      RContour curContour = polygon.contours[i];
-      beginShape();
-
-      for ( int j = 0; j < curContour.points.length; j++) {
-        RPoint curPoint = curContour.points[j];
-        //ellipse(curPoint.x, curPoint.y, 1, 1);
-      }
-      endShape();
-    }
-  }
-
-  firstLetter = true;
-
-  for (int k = 0; k < catgroup.elements.length; k++) {
-
-    polygon = (RPolygon) catgroup.elements[k];
-
-    if (firstLetter) {
-      translate((polygon.getWidth() / 2), (height / 2) + (polygon.getHeight() / 2));
-      firstLetter = false;
-    }
-
-    for ( int i = 0; i < polygon.contours.length; i++) {
-      RContour curContour = polygon.contours[i];
-      beginShape();
-
-      for ( int j = 0; j < curContour.points.length; j++) {
-        RPoint curPoint = curContour.points[j];
-        //ellipse(curPoint.x, curPoint.y, 1, 1);
-      }
-      endShape();
-    }
-  }
-
-  firstLetter = true;
-
   for (int k = 0; k < freegroup.elements.length; k++) {
     RPolygon free = (RPolygon) freegroup.elements[k];
     RPolygon cat = (RPolygon) catgroup.elements[k];
-
     if (firstLetter) {
-      //translate((free.getWidth() / 2), (height / 4) + (free.getHeight() / 2));
+      translate(0, cat.getHeight());
       firstLetter = false;
     }
     RContour catc;
@@ -107,12 +69,11 @@ void draw() {
       RContour freec = free.contours[i];
       if (i < cat.contours.length) {
         catc = cat.contours[i];
-      } else {
+      } 
+      else {
         catc = cat.contours[0];
       }
-
       beginShape();
-
       for (int j = 0; j < freec.points.length; j++) {
         RPoint freep = freec.points[j];
         if (j < catc.points.length) {
