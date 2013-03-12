@@ -95,20 +95,21 @@ void setup() {
       if (i == 0 || j == 0 || i == border.modules.length-1 || j== border.modules[i].length - 1) {
         Module mod = border.modules[i][j];
         if (flip) {
-          ellipse(mod.x+mod.w/2, mod.y+mod.h/2 - 10, 10, 10);
-          ellipse(mod.x+mod.w/2 + 5, mod.y+mod.h/2, 10, 10);
-          ellipse(mod.x+mod.w/2 - 5, mod.y+mod.h/2, 10, 10);
+          pushMatrix();
+          rotate(PI);
+          catShape(-mod.x - mod.w/2, - mod.y - mod.h/2);
+          popMatrix();
+          
           flip = false;
         } 
         else {
-          ellipse(mod.x+mod.w/2, mod.y+mod.h/2 + 10, 10, 10);
-          ellipse(mod.x+mod.w/2 + 5, mod.y+mod.h/2, 10, 10);
-          ellipse(mod.x+mod.w/2 - 5, mod.y+mod.h/2, 10, 10);
+          catShape(mod.x + mod.w/2, mod.y + mod.h/2);
           flip = true;
         }
       }
     }
   }
+
 }
 
 
@@ -171,12 +172,92 @@ void drawText(String _line, String _catline, float _fontSize, float _x, float _y
   popMatrix();
 }
 
-void catShape() {
+void catShape(float _x, float _y) {
 
+  float x = _x;
+  float y =_y;
+  
   RShape catshp;
   RShape catpolyshp;
 
   RFont font;
   RGroup fontgroup;
+  
+  
+
+  strokeWeight(1.);
+  strokeJoin(ROUND);
+  strokeCap(SQUARE);
+
+  RG.init(this);
+  RCommand.setSegmentLength(100);
+  RCommand.setSegmentator(RCommand.UNIFORMLENGTH);
+  catshp = RG.loadShape("cat.svg");
+  catshp = RG.centerIn(catshp, g, 100);
+
+  RCommand.setSegmentLength(100);
+  font = new RFont("FreeSansNoPunch.ttf", 200, RFont.CENTER);
+  fontgroup = font.toGroup("c").toPolygonGroup();
+
+  float pointSeparation = 100;
+  RG.setPolygonizer(RG.UNIFORMLENGTH);
+  RG.setPolygonizerLength(pointSeparation);
+  catpolyshp = RG.polygonize(catshp);
+  
+  pushMatrix();
+  translate(x, y);
+
+  RPoint[] catpoints = catpolyshp.getPoints();
+
+
+  for (int k = 0; k < fontgroup.elements.length; k++) {
+    RPolygon fontpolygon = (RPolygon) fontgroup.elements[k];
+
+    for (int j = 0; j < fontpolygon.contours.length; j++) {
+      RContour fontcontour = fontpolygon.contours[j];
+
+      beginShape();
+
+      int counter = 0;
+      int index = 0;
+      boolean cat = true;
+      if (catpoints.length > fontcontour.points.length) {
+        index = catpoints.length;
+      } 
+      else {
+        index = fontcontour.points.length;
+        cat = false;
+      }
+
+      RPoint catpoint;
+      RPoint fontpoint;
+      for (int h = 0; h < index; h++) {
+        if (cat) {
+          catpoint = catpoints[h];
+          if (counter == fontcontour.points.length - 1) {
+            counter = 0;
+          }
+          else {
+            counter++;
+          }
+          fontpoint = fontcontour.points[counter];
+        } 
+        else {
+          fontpoint = fontcontour.points[h];
+          if (counter == catpoints.length - 1) {
+            counter = 0;
+          }
+          else {
+            counter++;
+          }
+          catpoint = catpoints[counter];
+        }
+
+        vertex(((catpoint.x + fontpoint.x)/2)/5, ((catpoint.y + fontpoint.y)/2)/5);
+      }
+      endShape();
+    }
+  }
+  popMatrix();
 }
 
