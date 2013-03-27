@@ -1,8 +1,12 @@
+import processing.pdf.*;
+
 import geomerative.*;
+
 
 
 void setup() {
   size(512, 512);
+  beginRecord(PDF, "imgs/" + getClass().getName() + day() + hour() + minute() + second() + "grab.pdf"); 
   background(255);
   colorMode(HSB, 360, 100, 100);
 
@@ -11,7 +15,20 @@ void setup() {
     "GI", "AN", "TS", "TE", "PS"
   };
   int margin = 5;
-
+  int check[] = new int[5];
+  for (int i = 0; i < check.length; i++) {
+    check[i] = 0;
+  }
+  int rch[] = new int[5];
+  for (int i = 0; i < rch.length; i++) {
+    rch[i] = 0;
+  }
+  int ach[][] = new int[5][5];
+  for (int i = 0; i < 5; i++) {
+    for (int j = 0; j < 5; j++) {
+      ach[i][j] = 0;
+    }
+  }
 
   int colorbase = (int)random(360);
   println(colorbase);
@@ -37,31 +54,64 @@ void setup() {
         translate(m.x, m.y);
         text(gs[i], 0, 0);
         popMatrix();
-        
+        check[i] = 1;
+        rch[j] = 1;
+        ach[i][j] = 1;
       } 
       else {
 
-        
-        HSBColor ranColor = new HSBColor(colorbase, random(100), random(100));
-        fill(ranColor.h, ranColor.s, ranColor.b);
-        stroke(ranColor.h, ranColor.s, ranColor.b);
-        int sw = (int)random(3);
-        switch(sw) {
-        case 0:
-          drawSpiral((int)m.x, (int)m.y, (int)m.w, (int)m.h);
-          break;
-        case 1:
-          //drawShape(50, m.x + m.w/2, m.y + m.h/2, m.w/3);
-          drawClock(50, m.x, m.y, m.w-random(m.w/1.5, m.w/2), m.w, m.h);
-          break;
-        case 2:
-          //drawPlus(m.x, m.y, m.w, m.h, 30);
-          drawFootball(m.x, m.y, m.w, m.h, 15);
-          break;
+        for (int k = 0; k < check.length; k++) {
+          if (check[k] != 1) {
+            pushMatrix();
+            fill(0, 0, 0);
+            int temp = (int)random(grid.rows);
+            Module rm = grid.modules[k][temp];
+            translate(rm.x, rm.y);
+            text(gs[k], 0, 0);
+            popMatrix();
+            check[k] = 1;
+            rch[temp] = 1;
+            ach[k][temp] = 1;
+          }
+        }
+
+
+        if (ach[i][j] != 1) {
+          HSBColor ranColor = new HSBColor(colorbase, random(100), random(20, 100));
+          fill(ranColor.h, ranColor.s, ranColor.b);
+          stroke(ranColor.h, ranColor.s, ranColor.b);
+          int sw = (int)random(8);
+          switch(sw) {
+          case 0:
+            drawSpiral((int)m.x, (int)m.y, (int)m.w, (int)m.h);
+            break;
+            case 1:
+            drawShape(50, m.x + m.w/2, m.y + m.h/2, m.w/3);
+            break;
+          case 2:
+            drawShape(3, m.x + m.w/2, m.y + m.h/2, m.w/3);
+            break;
+            case 3:
+            drawClock(50, m.x, m.y, m.w-random(m.w/1.5, m.w/2), m.w, m.h);
+            break;
+            case 4:
+            iceCreamCone(m.x, m.y, m.w, m.h);
+            break;
+          case 5:
+            drawPlus(m.x, m.y, m.w, m.h, 30);
+            break;
+            case 6:
+            drawFootball(m.x, m.y, m.w, m.h, random(15,20));
+            break;
+          case 7:
+            drawShape(4, m.x + m.w/2, m.y + m.h/2, m.w/3);
+            break;
+          }
         }
       }
     }
   }
+  endRecord();
 }
 
 void drawSpiral(int _x, int _y, int _w, int _h) {
@@ -150,40 +200,56 @@ void drawClock(float _n, float _x, float _y, float _r, float _w, float _h) {
   pushMatrix();
   translate(_x+_w/2, _y+_h/2);
   float v = 400 / _n;
-  stroke(0,0,0);
+  stroke(0, 0, 0);
   strokeWeight(5);
   beginShape();
   for (int i = 0; i < _n; i++)
   {
     float vertexX = cos(radians(i * v) - QUARTER_PI) * _r;
     float vertexY = sin(radians(i * v) - QUARTER_PI) * _r;
-    vertex(vertexX, vertexY); 
+    vertex(vertexX, vertexY);
   }
   endShape();
-  
+
   int bh = (int) random(_n);
   int lh = (int)random(_n);
-  
+
   for (int i = 0; i < _n; i++)
   {
     float vertexX = cos(radians(i * v) - QUARTER_PI) * _r/1.1;
     float vertexY = sin(radians(i * v) - QUARTER_PI) * _r/1.1;
     float vertexX1 = cos(radians(i * v) - QUARTER_PI) * _r/2;
     float vertexY1 = sin(radians(i * v) - QUARTER_PI) * _r/2;
-    
+
     if (i == bh) {
-     line(0,0,vertexX,vertexY);
+      line(0, 0, vertexX, vertexY);
     } 
     if (i == lh) {
-     line(0,0,vertexX1,vertexY1);
-    } 
-     
+      line(0, 0, vertexX1, vertexY1);
+    }
   }
-  
+
   fill(0);
-  ellipse(0,0,_r/10,_r/10);
-  
+  ellipse(0, 0, _r/10, _r/10);
+
   popMatrix();
 }
-  
+
+void iceCreamCone(float _x, float _y, float _w, float _h) {
+  pushMatrix();
+  translate(_x+_w/2, _y+_h/2);
+
+  stroke(0);
+  strokeWeight(1);
+
+  ellipse(_w/4, 0, _h/4, _h/4); 
+
+  quad(-_w/3, -_h/12, -_w/3, _h/12, 0, _h/8, 0, -_h/8);
+
+  rectMode(CENTER);
+  rect(0, 0, _h/6, _h/4);
+
+
+  popMatrix();
+}
 
